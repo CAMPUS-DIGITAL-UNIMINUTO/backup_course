@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/backup_course/db" VERSION="20120925" COMMENT="XMLDB file for Moodle local/backup_course"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="bc_registro_pc" COMMENT="Defines registro_pc">
+      <FIELDS>
+        <FIELD NAME="id"        TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="url_padre" TYPE="char"   LENGTH="255"  NOTNULL="true" SEQUENCE="false" COMMENT="URL del hijo" />
+        <FIELD NAME="nombre"    TYPE="char"   LENGTH="255"  NOTNULL="true" SEQUENCE="false" COMMENT="Nombre del sitio"/>
+        <FIELD NAME="token"     TYPE="char"   LENGTH="60"   NOTNULL="true" SEQUENCE="false" COMMENT="token se genera auto"/>
+        <!-- <FIELD NAME="ip"        TYPE="char"   LENGTH="30"   NOTNULL="true" SEQUENCE="false" COMMENT="IP de hijo" /> -->
+        <FIELD NAME="url_hijo"  TYPE="char"   LENGTH="255"  NOTNULL="true" SEQUENCE="false" COMMENT="URL del hijo" />
+        <FIELD NAME="estado"    TYPE="int"    LENGTH="2"    NOTNULL="true" SEQUENCE="false" COMMENT="Estado de token"/>
+        <FIELD NAME="edition"   TYPE="int"    LENGTH="2"    NOTNULL="true" SEQUENCE="false" COMMENT="Activar la edición de actividades"/>
+        <FIELD NAME="startdate" TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="false" COMMENT="Fecha de inicio de periodo académico"/>
+        <FIELD NAME="enddate8"  TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="false" COMMENT="Fecha fin de periodo de 8 semanas"/>
+        <FIELD NAME="enddate16" TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="false" COMMENT="Fecha fin de periodo de 16 semanas"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for registro_PC"/>
+      </KEYS>
+    </TABLE>
+
+    <TABLE NAME="bc_white_list" COMMENT="Defines white_list">
+      <FIELDS>
+        <FIELD NAME="id"       TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="token"    TYPE="char"   LENGTH="60"   NOTNULL="true" SEQUENCE="false" COMMENT="roken de la tabla registro_PC" />
+        <FIELD NAME="url"     TYPE="char"   LENGTH="255"  NOTNULL="true" SEQUENCE="false" COMMENT="URL de la tabla registro" />
+        <FIELD NAME="estado"   TYPE="BINARY" LENGTH="2"    NOTNULL="true" SEQUENCE="false" COMMENT="Estado de token" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for white_list"/>
+      </KEYS>
+    </TABLE>
+    
+    <TABLE NAME="bc_black_list" COMMENT="Defines black_list">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" COMMENT="id de la tabla"/>
+        <FIELD NAME="token"  TYPE="char"   LENGTH="60"   NOTNULL="true" SEQUENCE="false" COMMENT="token de la tabla regitro a blokear"/>
+        <!-- <FIELD NAME="ip"     TYPE="char"   LENGTH="30"   NOTNULL="true" SEQUENCE="false" COMMENT="IP de hijo" /> -->
+        <FIELD NAME="url"    TYPE="char"   LENGTH="255"  NOTNULL="true" SEQUENCE="false" COMMENT="URL del hijo" />
+        <FIELD NAME="estado" TYPE="BINARY" LENGTH="2"    NOTNULL="true" SEQUENCE="false" COMMENT="Estado de token"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de la rel_padre_hijo"/>
+      </KEYS>
+    </TABLE>  
+    
+    <TABLE NAME="bc_rel_padre_hijo" COMMENT="Relacion entre el padre y el hijo">
+      <FIELDS>
+        <FIELD NAME="id"               TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="registroid"       TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la tabla bc_registro_pc" />
+        <FIELD NAME="registroid_nodo"  TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la tabla bc_registro_pc en el nodo" />
+        <FIELD NAME="courseid_sp"      TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id del curso en el servidor padre" />
+        <FIELD NAME="courseid_sh"      TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id del curso en el servidor hijo" />
+        <FIELD NAME="estado_update"    TYPE="BINARY" LENGTH="2"  NOTNULL="true" SEQUENCE="false" COMMENT="Estado de la actualización" />
+        <FIELD NAME="objet_ph"         TYPE="text"  LENGTH="999" NOTNULL="true" SEQUENCE="false" COMMENT="Objeto de la relacion del padre con el hijo" />
+        <FIELD NAME="userid_nodo"      TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id del usuario que realiza la importación" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de la rel_padre_hijo"/>
+      </KEYS>
+    </TABLE>   
+    
+    <TABLE NAME="bc_course_import" COMMENT="Defines course_import">
+      <FIELDS>
+        <FIELD NAME="id"       TYPE="int"   LENGTH="10"   NOTNULL="true" UNSIGNED="true" SEQUENCE="true" COMMENT="Id de la tabla"/>
+        <FIELD NAME="courseid" TYPE="int"   LENGTH="10"   NOTNULL="true" SEQUENCE="false" COMMENT="Id del curso importado"/>
+        <FIELD NAME="obj"      TYPE="text"  LENGTH="5000" NOTNULL="true" SEQUENCE="false" COMMENT="Toda la información del curso" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de los cursos importados"/>
+      </KEYS>
+    </TABLE>  
+    
+        
+    <!-- tablas para la actualización -->
+    <TABLE NAME="updates_courses" COMMENT="Defines updates_courses">
+      <FIELDS>
+        <FIELD NAME="id"            TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="id_course_sp"  TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="false" COMMENT="id del curso en el padre"/>
+        <FIELD NAME="id_act_sp"     TYPE="int"    LENGTH="10"   NOTNULL="true" SEQUENCE="false" COMMENT="id de la actividad en el padre" />
+        <FIELD NAME="type_act"      TYPE="char"   LENGTH="255"  NOTNULL="true" SEQUENCE="false" COMMENT="tipo de la actividad en el padre" />
+        <FIELD NAME="obj_act"       TYPE="text"   LENGTH="999" NOTNULL="true" SEQUENCE="false" COMMENT="Objeto de la información de la actividad" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de la updates_courses"/>
+      </KEYS>
+    </TABLE> 
+    
+    <TABLE NAME="updates_log" COMMENT="Defines updates_log">
+      <FIELDS>
+        <FIELD NAME="id"          TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="id_update"   TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la updates_courses"/>
+        <FIELD NAME="id_user"     TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id del user que realiza la actualización" />
+        <FIELD NAME="time_update" TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="fecha de actualizacion" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de la updates_log"/>
+      </KEYS>
+    </TABLE>  
+    
+    <TABLE NAME="updates_nodos" COMMENT="Defines updates_nodos">
+      <FIELDS>
+        <FIELD NAME="id"                      TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="id_nodo_rel"             TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la bc_registro_pc"/>
+        <FIELD NAME="id_course_sp"            TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id del curso en el padre" />
+        <FIELD NAME="id_log"                  TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la de updates_log" />
+        <FIELD NAME="estado"                  TYPE="BINARY" LENGTH="2"  NOTNULL="true" SEQUENCE="false" COMMENT="estado de la actualizacion" />
+        <FIELD NAME="cant_courses_actual"     TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="cantidad de cursos registrados en el padre en el nodo" />
+        <FIELD NAME="cant_courses_terminados" TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="cantidad de cursos que se actualizan" />
+        <FIELD NAME="cant_courses_enhijo"     TYPE="int"    LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="respuesta del nodo sobre la cantidad de cursos" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de la updates_nodos"/>
+      </KEYS>
+    </TABLE>
+    
+    <TABLE NAME="updates_nodos_course" COMMENT="Defines updates_nodos_course">
+      <FIELDS>
+        <FIELD NAME="id"              TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="id_updates_nodo" TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la updates_nodos"/>
+        <FIELD NAME="id_curso_sh"     TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id del curso en el hijo" />
+        <FIELD NAME="id_nodo_rel"     TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la bc_registro_pc"/>
+        <FIELD NAME="estado"          TYPE="BINARY" LENGTH="2"  NOTNULL="true" SEQUENCE="false" COMMENT="estado de la actualizacion el curso del hijo" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de la updates_nodos_course"/>
+      </KEYS>
+    </TABLE>  
+    
+    <TABLE NAME="update_hijo" COMMENT="Defines update_hijo">
+      <FIELDS>
+        <FIELD NAME="id"          TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="true"  UNSIGNED="true"  COMMENT="id de la tabla"/>
+        <FIELD NAME="id_log"      TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id de la de updates_log" />
+        <FIELD NAME="id_curso_sh" TYPE="int"    LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="id del curso en el hijo" />
+        <FIELD NAME="estado"      TYPE="BINARY" LENGTH="2"  NOTNULL="true" SEQUENCE="false" COMMENT="estado de la actualizacion el curso del hijo" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key de la update_hijo"/>
+      </KEYS>
+    </TABLE>   
+        
+  </TABLES>
+
+</XMLDB>
