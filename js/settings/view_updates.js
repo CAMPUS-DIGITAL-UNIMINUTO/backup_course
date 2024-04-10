@@ -11,7 +11,7 @@ class view_updates {
      */
     get_updates() {
         $('.loader').css("display", "block");
-        $('#list_updates_black').empty();
+        $('#list_updates_set').empty();
         $.ajax({
             url: '../../methods/settings/class_admin_updates.php',
             data: {key: 'Q01'},
@@ -26,25 +26,22 @@ class view_updates {
                 if (status != 'error') {
                     try {
                         if (json.responseText.length > 2) {
-                            $('#list_updates_black').append('<span class="lista_no_updates" >' + json.responseText + '</span>');
+                            $('#list_updates_set').append('<span class="lista_no_updates" >' + json.responseText + '</span>');
                             if (typeof JSON.parse(json.responseText) == 'object') {
-                                $('#list_updates_black').empty();
+                                $('#list_updates_set').empty();
                                 $.each(JSON.parse(json.responseText), function (k, v) {
-                                    $('#list_updates_black').append('<tr id="datos_nodos-' + v['id'] + '" onclick="v_updates.get_list_courses_updates(' + v['id'] + ')">' +
+                                    $('#list_updates_set').append('<tr id="datos_nodos-' + v['id'] + '" onclick="v_updates.get_list_courses_updates(' + v['id'] + ')">' +
                                             '<td style="color: #000;"> ' + v['nombre'] + '</td>' +
                                             '<td style="color: #000;"> ' + v['url_hijo'] + '</td>' +
-                                            //'<span style="width: 30%; float: left; border-left: #dbdbdb solid 1px; border-right: #dbdbdb solid 1px;"> id: ' + v['id_act_sp'] + '</span><br>' +
-                                            //'<span class="nombre_curso_list" data-toggle="collapse" data-target="#contenDataPlantilla-'+v['id']+'"><i class="fa fa-fw fa-eye"></i> Ver objeto</span><br>' +
-                                            //'<textarea class="collapse" id="contenDataPlantilla-'+v['id']+'" style="width: 100%;">' + v['obj_act'] + '</textarea>' +
                                         '</tr>');
                                            
                                 });
                             }else {
-                                $('#list_updates_black').append('<span class="lista_no_updates" >No hay updates en lista negra</span>');
+                                $('#list_updates_set').append('<span class="lista_no_updates" >No hay updates enviadas</span>');
                             }
 
                         } else {
-                            $('#list_updates_black').append('<span class="lista_no_updates" >No hay updates bloqueados</span>');
+                            $('#list_updates_set').append('<span class="lista_no_updates" >No hay nodos con actualizaciones enviadas</span>');
                         }
                     } catch (e) {
                     } finally {
@@ -81,7 +78,6 @@ class view_updates {
                                     $('#list_updates_activos').append('<tr id="datos_list_course-' + v['id_course_sp'] + '" onclick="v_updates.get_list_items_updates(' + v['id_course_sp'] + ', '+id+')">' +
                                             '<td class="lista_no_updates" style="color: #000;">' + v['fullname'] + '</td>' +
                                             '<td class="lista_no_updates" style="color: #000;">' + v['shortname'] + '</td>' +
-                                            //'<td class="lista_no_updates" >' + v['email'] + '</td>' +
                                         '</tr>');
                                            
                                 });
