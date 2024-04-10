@@ -8,9 +8,9 @@ $PAGE->set_url('/local/backup_course/template/settings/view_hijos.php');
 $PAGE->set_pagelayout('admin');
 $PAGE->requires->css('/local/backup_course/css/base/tostadas.css');
 $PAGE->requires->css('/local/backup_course/css/base/jquery-confirm.css');
+$PAGE->requires->css('/local/backup_course/css/base/style.css');
 $PAGE->requires->jquery();
-$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/local/backup_course/js/base/mensajes.js') );
-$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/local/backup_course/js/base/jquery-confirm.js') );
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/local/backup_course/js/base/llamados.js') );
 
 $title = get_string('crear_hijo', 'local_backup_course');
 echo $OUTPUT->header();
@@ -21,15 +21,15 @@ echo $OUTPUT->heading($title);
 
 <div class="app-content  flex-column-fluid ">
     <div id="header_list_tokens" class="app-container  container-fluid ">
-        <div class="loader"></div>
+        <div class="loader" id="loader"></div>
         <div class="container mt-5">
           <!-- ini tabs -->
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="hijos-tab" data-toggle="tab" href="#hijos" role="tab" aria-controls="hijos" aria-selected="true">Hijos</a>
+              <a class="nav-link active" id="hijos-tab" data-toggle="tab" href="#hijos" role="tab" aria-controls="hijos" aria-selected="true" onclick="crud.listar_hijos()">Hijos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="tokens-tab" data-toggle="tab" href="#tokens" role="tab" aria-controls="tokens" aria-selected="false">Tokens</a>
+              <a class="nav-link" id="tokens-tab" data-toggle="tab" href="#tokens" role="tab" aria-controls="tokens" aria-selected="false" onclick="admin_tok.get_tokens_black()">Tokens</a>
             </li>
           </ul>
           <!-- fin tabs -->
@@ -40,7 +40,7 @@ echo $OUTPUT->heading($title);
                 <div class="row">
                     <!-- ini crud hijos -->
                     <div id="form_hijos" class="col-md-6" style="border-right: 1px solid #dbdbdb;"> 
-                        <form><br><br>
+                        <form><br>
                           <div class="form-group row">
                             <input type="hidden" class="form-control" id="id_reg" >
                             <label for="nombre_hijo" class="col-md-6">Digite el nombre del Moodle hijo</label>
@@ -82,7 +82,9 @@ echo $OUTPUT->heading($title);
                     </div>
                     <!-- fin crud hijos -->
                     <!-- ini list hijos -->
-                    <div id="list_tokens_creados" class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10"> 
+                    <div class="col-md-6"> <br>
+                        <h5>Lista de hijos</h5><hr>
+                        <div id="list_tokens_creados" ></div>
                     </div>
                     <!-- fin list hijos -->
                 </div>
@@ -91,8 +93,18 @@ echo $OUTPUT->heading($title);
             <!-- ini tab tokens -->
             <div class="tab-pane fade" id="tokens" role="tabpanel" aria-labelledby="tokens-tab">
               <div class="row">
-                
-                <div id="list_tokens" class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10"> </div>
+                <div class="col-md-6">
+                    <div class="header_list_tokens"><br>
+                        <h5>Lista de Tokens Bloqueados</h5><hr>
+                        <div id="list_tokens_black"> </div>
+                    </div>
+                </div>
+                <div class="col-md-6">    
+                    <div class="header_list_tokens"><br>
+                        <h5>Lista de Tokens Activos</h5><hr>
+                        <div id="list_tokens_activos"> </div>
+                    </div>
+                </div>
             </div>
             <!-- fin tab tokens -->
           </div>
@@ -103,12 +115,11 @@ echo $OUTPUT->heading($title);
 
 </div>
 
-
-
 <?php
-$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/local/backup_course/js/settings/crud_settings.js') );
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/local/backup_course/js/settings/crud_settings_hijos.js') );
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/local/backup_course/js/settings/crud_settings_tokens.js') );
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/local/backup_course/js/base/mensajes.js') );
 echo $OUTPUT->footer();
-
 
 
 

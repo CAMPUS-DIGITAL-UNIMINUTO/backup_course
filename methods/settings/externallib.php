@@ -21,7 +21,7 @@
 require_once '../../config.php';
 require_once($CFG->dirroot . '/lib/externallib.php');
 require_once($CFG->dirroot . '/lib/completionlib.php');
-require_once($CFG->dirroot . '/local/backup_course/methods/ws_access.php');
+require_once($CFG->dirroot . '/local/backup_course/methods/settings/crud_settings_hijo.php');
 
 class local_backup_token_external extends external_api
 {
@@ -109,7 +109,6 @@ class local_backup_token_external extends external_api
                 'function' => new external_value(PARAM_CLEAN, 'function'),
                 'search' => new external_value(PARAM_CLEAN, 'search'),
                 'token' => new external_value(PARAM_CLEAN, 'token'),
-                /* 'ip' => new external_value(PARAM_CLEAN, 'ip'), */
                 'url_hijo' => new external_value(PARAM_CLEAN, 'url_hijo'),
                 'estado' => new external_value(PARAM_CLEAN, 'estado'),
             )
@@ -120,13 +119,12 @@ class local_backup_token_external extends external_api
      * @params {string} $func
      * @params {string} $search
      * @params {string} $token
-     * @params {string} $ip
      * @params {string} $url_hijo
      * @params {int} $estado
      * Retorna los cursos encontrados
      * return {objet}
      */
-    public static function find_courses($func, $search, $token,/* $ip, */ $url_hijo, $estado)
+    public static function find_courses($func, $search, $token, $url_hijo, $estado)
     {
         //Function Q02
         global $DB;
@@ -134,7 +132,6 @@ class local_backup_token_external extends external_api
             'function' => $func,
             'search' => $search,
             'token' => $token,
-            /* 'ip' => $ip,  */
             'url' => $url_hijo,
             'estado' => $estado
         );
@@ -173,7 +170,6 @@ class local_backup_token_external extends external_api
                 'function' => new external_value(PARAM_CLEAN, 'function'),
                 'search' => new external_value(PARAM_CLEAN, 'search'),
                 'token' => new external_value(PARAM_CLEAN, 'token'),
-                /* 'ip' => new external_value(PARAM_CLEAN, 'ip'), */
                 'url_hijo' => new external_value(PARAM_CLEAN, 'url_hijo'),
                 'estado' => new external_value(PARAM_CLEAN, 'estado'),
                 'id_nodo' => new external_value(PARAM_CLEAN, 'id_nodo'),
@@ -187,7 +183,6 @@ class local_backup_token_external extends external_api
      * @params {string} $func
      * @params {string} $search
      * @params {string} $token
-     * @params {string} $ip
      * @params {string} $url_hijo
      * @params {int} $estado
      * @params {int} $id_nodo
@@ -195,7 +190,7 @@ class local_backup_token_external extends external_api
      * Retorna las secciones y sus respectivas actividades
      * return {objet}
      */
-    public static function find_coursesAct($func, $search, $token,/* $ip, */ $url_hijo, $estado, $id_nodo, $id_course)
+    public static function find_coursesAct($func, $search, $token, $url_hijo, $estado, $id_nodo, $id_course)
     {
         global $DB, $CFG, $USER;
 
@@ -322,7 +317,6 @@ class local_backup_token_external extends external_api
                 'function' => new external_value(PARAM_CLEAN, 'function'),
                 'url' => new external_value(PARAM_CLEAN, 'url'),
                 'token' => new external_value(PARAM_CLEAN, 'token'),
-                /* 'ip' => new external_value(PARAM_CLEAN, 'ip'), */
                 'url_padre' => new external_value(PARAM_CLEAN, 'url_padre'),
                 'id_reg' => new external_value(PARAM_CLEAN, 'id_reg'),
                 'id_nodo' => new external_value(PARAM_CLEAN, 'id_nodo'),
@@ -338,7 +332,6 @@ class local_backup_token_external extends external_api
      * @params {string} $func
      * @params {string} $url_hijo
      * @params {string} $token
-     * @params {string} $ip
      * @params {string} $url_padre
      * @params {int} $id_reg
      * @params {int} $id_nodo
@@ -349,14 +342,13 @@ class local_backup_token_external extends external_api
      * Retorna la verificación de creación
      * return {objet}
      */
-    public static function find_relation($func, $url_hijo, $token,/* $ip, */ $url_padre, $id_reg, $id_nodo, $id_padre, $estado, $obj, $id_user)
+    public static function find_relation($func, $url_hijo, $token, $url_padre, $id_reg, $id_nodo, $id_padre, $estado, $obj, $id_user)
     {
         global $DB, $USER, $CFG;
         $params = array(
             'function' => $func,
             'url' => $url_hijo,
             'token' => $token,
-            /* 'ip' => $ip,  */
             'url_padre' => $url_padre,
             'id_reg' => $id_reg,
             'id_nodo' => $id_nodo,
@@ -505,7 +497,6 @@ class local_backup_token_external extends external_api
      * @params {string} $func
      * @params {string} $search
      * @params {string} $token
-     * @params {string} $ip
      * @params {string} $url_hijo
      * @params {int} $estado
      * Retorna categorias y preguntas encontradas

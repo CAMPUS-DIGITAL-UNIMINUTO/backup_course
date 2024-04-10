@@ -18,7 +18,6 @@
  * @copyright 2024 Daniela Sierra https://danielasierra.com.co
  * @license   https://www.uniminuto.edu/  
  */
-
 if ($hassiteconfig) {
     //gernerar el token para moodle y el web service
     global $DB;
@@ -46,29 +45,24 @@ if ($hassiteconfig) {
     ////////////////////////////iniciar configuración del plugin/////////////////////////////////
     $ADMIN->add('localplugins', new admin_category('local_backup_course', new lang_string('pluginname', 'local_backup_course')));
 
-    $settings = new admin_settingpage('local_backup_course', get_string('pluginname', 'local_backup_course'));
-    if(empty($tb_reg)){
+    
+    if(empty($tb_reg)){//solo si no hay registros
+        $settings = new admin_settingpage('hijo_padre', 'Rol de instancia');
         $options = array();  
             $options[0]='Padre';
             $options[1]='Hijo';
 
-        $adminsetting = new admin_setting_configselect('instancia', get_string('instancia', 'local_backup_course'), get_string('instancia_desc', 'local_backup_course'), 0, $options);
-        $adminsetting->plugin = 'local_backup_course';
-        $settings->add($adminsetting);
+        $settings->add(new admin_setting_configselect('instancia',
+        new lang_string('instancia', 'local_backup_course'),
+        new lang_string('instancia_desc', 'local_backup_course'), 0, $options));
+        $ADMIN->add('local_backup_course',$settings );
         
-    }else if(!empty($tb_reg) && get_config('local_backup_course', 'instancia') == '0'){//es padre
-        $adminsetting = new admin_setting_configempty('cambio',get_string('cambio', 'local_backup_course'), get_string('cambio', 'local_backup_course'));
-        $adminsetting->plugin = 'local_backup_course';
-        $settings->add($adminsetting);
     }
 /////////////////////////////Configuración cuando es Padre//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    if (get_config('local_backup_course', 'instancia') == '0') {///padre
+    if (empty(get_config('local_backup_course', 'instancia') )) {///padre
 
         $ir = new admin_externalpage('crear_hijo', get_string('crear_hijo', 'local_backup_course'), $CFG->wwwroot.'/local/backup_course/template/settings/view_hijos.php');
-        $ADMIN->add('local_backup_course',$ir ); //Crear enlace para ir a ver la administración de hijos
-
-        $ir = new admin_externalpage('admin_tokes', get_string('admin_tokes', 'local_backup_course'), $CFG->wwwroot.'/local/backup_course/template/settings/view_tokens.php');
-        $ADMIN->add('local_backup_course',$ir );  //Crear enlace para ir a ver la administración de tokens
+        $ADMIN->add('local_backup_course',$ir ); //Crear enlace para ir a ver la administración de hijos y tokens
         
         $ir = new admin_externalpage('view_updates', get_string('view_updates', 'local_backup_course'), $CFG->wwwroot.'/local/backup_course/template/settings/view_updates.php');
         $ADMIN->add('local_backup_course',$ir ); //Crear enlace para ir a ver la administración de actualizaciones
@@ -76,7 +70,7 @@ if ($hassiteconfig) {
 
 
     //Guardar el el registro la config de hijo
-    if (get_config('local_backup_course', 'instancia') == '1') {//hijo
+    if (!empty(get_config('local_backup_course', 'instancia')) ) {//hijo
         if(empty($tb_reg)){
             $registro_pc = new stdClass();
             $registro_pc->nombre = 'Soy Hijo';

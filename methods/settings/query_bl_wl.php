@@ -1,15 +1,8 @@
 <?php
-//require_once('/../../../config.php');
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of query_bl_wl
- *
- * @author daniela.sierra
+ * @package   local_backup_course
+ * @copyright 2024 Daniela Sierra https://danielasierra.com.co
+ * @license   https://www.uniminuto.edu/  
  */
 class query_bl_wl {
     /*
@@ -40,7 +33,7 @@ class query_bl_wl {
         return $resp;
     } 
     /*
-     * Search in balck_list -> QRY_BL
+     * Search in black_list -> QRY_BL
      * Busca en la lista negra 
      * @params -> string
      * Retorna el permiso
@@ -48,7 +41,7 @@ class query_bl_wl {
      */
     private function QRY_BL($url){
         global $DB;
-        $bl = $DB->get_records('bc_balck_list',array('url' =>$url));
+        $bl = $DB->get_records('bc_black_list',array('url' =>$url));
         $res = (!empty($bl)) ? 0 : 1;
         return $res;
     }
@@ -61,7 +54,7 @@ class query_bl_wl {
      */
     private function QRY_WL($url){
         global $DB;
-        $wl = $DB->get_records('bc_white_list',array('url' =>$url));
+        $wl = $DB->get_record('bc_white_list',array('url' =>$url));
         $res = (!empty($wl)) ? 0: 1;
         return $res;      
     }
@@ -75,8 +68,7 @@ class query_bl_wl {
     public function QRY_URLWL($url){
         global $DB;
         $wl = $DB->get_record('bc_white_list',array('url' =>$url));
-        //$id = each($wl);
-        $id = $wl->id;
+        $id = (!empty($wl))? $wl->id: 0;
         return $id;      
     }
     /*
@@ -86,16 +78,10 @@ class query_bl_wl {
      * Retorna el id de la búsqueda
      * return {int};
      */
-    public function QRY_RBC($url,$tok){
+    public function QRY_RBC($url){
         global $DB;
-        $rbc = $DB->get_record('bc_registro_pc',array('url_padre' =>$url,'token'=>$tok));
-        //$id = each($rbc);
-        if(!empty($rbc)){
-            $id = $rbc->id;
-        }else{
-            $id = 0;
-        }
-        
+        $rbc = $DB->get_record('bc_registro_pc',array('url_padre' =>$url));
+        $id = (!empty($rbc))? $rbc->id: 0;
         return $id;    
     }
     /*
@@ -105,20 +91,15 @@ class query_bl_wl {
      * Retorna el id si la encuentra
      * return {int};
      */
-    public function QRY_RBC_tok($url, $tok/* , $ip */){
+    public function QRY_RBC_tok($url, $tok){
         global $DB;
-        $rbc = $DB->get_record('bc_registro_pc',array('url_hijo' =>$url,'token'=>$tok/* , 'ip'=>$ip */));
-        if(!empty($rbc)){
-            //$id = each($rbc);
-            $id = $rbc->id;
-            return $id;
-        }else{
-            return null;
-        }
+        $rbc = $DB->get_record('bc_registro_pc',array('url_hijo' =>$url,'token'=>$tok));
+        $id = (!empty($rbc))? $rbc->id: null;
+        return $id;
             
     }
     /*
-     * Create in balck_list-> CRE_BL
+     * Create in black_list-> CRE_BL
      * Inserta en la lista Negra
      * @params -> array(url_padre,token,ip,estado)
      * return {};
@@ -130,7 +111,7 @@ class query_bl_wl {
         $registro->url = $params['url']; 
         /* $registro->ip = $params['ip']; */
         $registro->estado = $params['estado'];
-        return $DB->insert_record('bc_balck_list', $registro);
+        return $DB->insert_record('bc_black_list', $registro);
     }
     /*
      * Create in white_list -> CRE_WL

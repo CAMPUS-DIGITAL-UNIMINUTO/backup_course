@@ -23,5 +23,5 @@ $plugin->component = 'local_backup_course';
 $plugin->cron      = 300;
 $plugin->maturity  = MATURITY_ALPHA;
 $plugin->requires  = 2022112800;
-$plugin->version   = 2024040100;
+$plugin->version   = 2024040403;
 $plugin->release = 'For 4.1.7';

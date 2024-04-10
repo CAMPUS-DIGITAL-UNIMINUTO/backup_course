@@ -1,6 +1,11 @@
 <?php
-class ws_access
-{
+/**
+ * @package   local_backup_course
+ * @copyright 2024 Daniela Sierra https://danielasierra.com.co
+ * @license   https://www.uniminuto.edu/  
+ */
+require_once($CFG->dirroot . '/local/backup_course/methods/settings/query_bl_wl.php');
+class ws_access{
     /*
      * Run the class -> perms
      * @params -> array(url_padre,token,ip,estado)
@@ -22,6 +27,7 @@ class ws_access
         }
 
         return $resp;
+    }
            
     private function creNodo($params)    {
         global $DB, $CFG;
@@ -53,7 +59,7 @@ class ws_access
         global $DB;
         $query_bl_wl = new query_bl_wl();
         $resp = $query_bl_wl->run($params);
-        $id_reg = $query_bl_wl->QRY_RBC($params['url'], $params['nombre']);
+        $id_reg = $query_bl_wl->QRY_RBC($params['url']);
         if ($resp->response == 'Ya existe en la blanca' && !empty($id_reg)) {
             $registro_token = new stdClass();
             $registro_token->id = $id_reg;
@@ -64,9 +70,8 @@ class ws_access
             $registro_token->enddate16 = $params['enddate16'];
             $registro_token->estado = $params['estado'];
             $registro_token->edition = $params['edition'];
-            if (!empty($params['token'])) {
-                $registro_token->token = sha1($params['token']);
-            }
+            if (!empty($params['token'])) $registro_token->token = sha1($params['token']);
+
             $DB->update_record('bc_registro_pc', $registro_token);
             $registro_token->id = $query_bl_wl->QRY_URLWL($params['url']);
             $registro_token->url = $params['url'];
@@ -90,7 +95,7 @@ class ws_access
         global $DB;
         $query_bl_wl = new query_bl_wl();
         $resp = $query_bl_wl->run($params);
-        $id_reg = $query_bl_wl->QRY_RBC($params['url'], $params['token']);
+        $id_reg = $query_bl_wl->QRY_RBC($params['url']);
         if ($resp->response == 'Ya existe en la blanca' && !empty($id_reg)) {
             $query_bl_wl->DEL_WL($query_bl_wl->QRY_URLWL($params['url']));
             $DB->delete_records('bc_registro_pc', array('id' => $id_reg));
