@@ -189,7 +189,10 @@ class create{
         if(!empty($results) ){
             foreach ($results as $arr) {
                 if(property_exists($arr,'ack')){
-                    if($arr->ack == 1 && $idnodo != 0)  $DB->delete_records('bc_registro_pc',array('id'=>$idnodo));
+                    if($arr->ack == 1 && $idnodo != 0) {
+                        $DB->delete_records('bc_registro_pc',array('id'=>$idnodo));
+                        $DB->delete_records('bc_rel_padre_hijo',array('registroid'=>$idnodo));
+                    }
                 }else print_r($results);
             }
         }

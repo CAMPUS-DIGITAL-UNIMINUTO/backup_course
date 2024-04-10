@@ -227,7 +227,9 @@ class CRUD {
   eliminar_token (id){
       $.confirm({
         title: 'ELIMINAR',
-        content: '¿Desea Eliminar el registro?',
+        content: 'Al eliminar el nodo se perderá toda relación con el mismo (Actualizaciones, actividades propuestas, ETC.)'+
+                 '<br><br>Tenga presente que las actividades propuestas en el editor de cursos pueden dejar de funcionar si no se crea un nodo con la misma URL. '+
+                 '<br> ¿Está seguro de eliminar este nodo?',
         icon: 'fa fa-question',
         theme: 'modern',
         closeIcon: true,
