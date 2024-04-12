@@ -5,20 +5,21 @@
  * @license   https://www.uniminuto.edu/  
  */
 class query_bl_wl {
+    public function __construct(){    }
     /*
-     * Run the class -> run
+     * ejecutar the class -> ejecutar
      * Funcion principal, verifica los permisos que tienen las IP y los tokens
      * @params -> array(url_padre,token,ip,estado)
      * return {int};
      */
-    public static function run($params){
+    public static function ejecutar($parametros){
         $objQRY = new self();
         $resp = new stdClass();
-        $QRY_BL = $objQRY->QRY_BL($params['url']);
+        $QRY_BL = $objQRY->QRY_BL($parametros['url']);
         if($QRY_BL == 1){
-           $QRY_WL = $objQRY->QRY_WL($params['url']);
+           $QRY_WL = $objQRY->QRY_WL($parametros['url']);
            if($QRY_WL == 1){
-               $objQRY->CRE_WL($params);
+               $objQRY->CRE_WL($parametros);
                $resp->ack = 1;
                $resp->response = 'Puede crear';
            }else{
@@ -104,13 +105,12 @@ class query_bl_wl {
      * @params -> array(url_padre,token,ip,estado)
      * return {};
      */
-    public function CRE_BL($params){
+    public function CRE_BL($parametros){
         global $DB;
         $registro = new stdClass();
-        $registro->token = $params['token'];
-        $registro->url = $params['url']; 
-        /* $registro->ip = $params['ip']; */
-        $registro->estado = $params['estado'];
+        $registro->token = $parametros['token'];
+        $registro->url = $parametros['url']; 
+        $registro->estado = $parametros['estado'];
         return $DB->insert_record('bc_black_list', $registro);
     }
     /*
@@ -119,12 +119,12 @@ class query_bl_wl {
      * @params -> array(url_padre,token,estado)
      * return {};
      */
-    private function CRE_WL($params){
+    private function CRE_WL($parametros){
         global $DB;
         $registro = new stdClass();
-        $registro->token = sha1($params['token']);
-        $registro->url = $params['url']; 
-        $registro->estado = $params['estado'];
+        $registro->token = sha1($parametros['token']);
+        $registro->url = $parametros['url']; 
+        $registro->estado = $parametros['estado'];
         $DB->insert_record('bc_white_list', $registro);     
     }
     /*
@@ -133,9 +133,9 @@ class query_bl_wl {
      * @params -> array(url_padre,token,estado)
      * return {};
      */
-    public function UPD_WL($params){
+    public function UPD_WL($parametros){
         global $DB;
-        $DB->update_record('bc_white_list',$params);     
+        $DB->update_record('bc_white_list',$parametros);     
     }
     /*
      * Delete in white_list -> DEL_WL

@@ -4,26 +4,27 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/pagelib.php");
 require_once("$CFG->libdir/blocklib.php");
 
-class admin_tokens{
-    
-    public static function run(){
-        $obj = new self();
-        $idfunc = $_POST['key']; 
+class administrar_tokens{
+    public function __construct(){   $this->ejecutar();   }  
+
+    public  function ejecutar(){
+        $datosJSON = file_get_contents("php://input");
+        $_POST = json_decode($datosJSON);
+        $idfunc = $_POST->key; 
         switch($idfunc){
             case 'Q01': 
-                $resp = $obj->lista_tokens();
-                break;
+                echo json_encode($this->lista_tokens());
+            break;
             case 'D01': 
-                $resp = $obj->delete_token();
+                echo json_encode($this->eliminar_token());
                 break;
             case 'Q02': 
-                $resp = $obj->lista_tokens_activos();
-                break;
+                echo json_encode($this->lista_tokens_activos());
+            break;
             case 'U01': 
-                $resp = $obj->desactivar_token();
-                break;
+                echo json_encode($this->desactivar_token());
+            break;
         }
-        echo json_encode($resp);
     }
     /**
      * Listar tokens de la lista negra
@@ -41,7 +42,7 @@ class admin_tokens{
      * @param {string} tok
      * @returns {Generator}
      */
-    private function delete_token() {
+    private function eliminar_token() {
         global $DB;
         $registro = (object)$_POST;
         $res = array();
@@ -51,7 +52,7 @@ class admin_tokens{
         $tok = sha1('2017.UVD_TokeN_noDos');
         $url_actual = explode('/local/', $_SERVER['HTTP_REFERER']);
         $url = $registro->url.'/webservice/rest/server.php?wstoken='.$tok.'&wsfunction=local_remoter_register_node&moodlewsrestformat=json';
-        $params = array('function'=>$registro->key,
+        $parametros = array('function'=>$registro->key,
                         'url' =>$url_actual[0],
                         'nombre' => '',
                         'token' => $registro->token,
@@ -69,7 +70,7 @@ class admin_tokens{
                 );
 
         $curl = new curl;
-        $res['bc_registro_pc_h'] = json_decode($curl->post($url,$params));
+        $res['bc_registro_pc_h'] = json_decode($curl->post($url,$parametros));
         return $res;
     }
     
@@ -101,11 +102,10 @@ class admin_tokens{
         $tok = sha1('2017.UVD_TokeN_noDos');
         $url_actual = explode('/local/', $_SERVER['HTTP_REFERER']);
         $url = $tb_reg->url_hijo.'/webservice/rest/server.php?wstoken='.$tok.'&wsfunction=local_remoter_register_node&moodlewsrestformat=json';
-        $params = array('function'=>$registro->key,
+        $parametros = array('function'=>$registro->key,
                         'url' =>$url_actual[0],
                         'nombre' => $tb_reg->nombre,
                         'token' => $tb_reg->token,
-                        /* 'ip' => $_SERVER['SERVER_ADDR'], */
                         'url_hijo' =>$tb_reg->url_hijo,
                         'startdate'=>$tb_reg->startdate,
                         'enddate8'=>$tb_reg->enddate8,
@@ -115,8 +115,8 @@ class admin_tokens{
                 );
 
         $curl = new curl;
-        $res['bc_registro_pc_h'] = json_decode($curl->post($url,$params));
+        $res['bc_registro_pc_h'] = json_decode($curl->post($url,$parametros));
         return $res;
     }
 }
-admin_tokens::run();
+new administrar_tokens();  

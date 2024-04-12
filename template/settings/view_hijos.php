@@ -29,7 +29,7 @@ echo $OUTPUT->heading($title);
               <a class="nav-link active" id="hijos-tab" data-toggle="tab" href="#hijos" role="tab" aria-controls="hijos" aria-selected="true" onclick="crud.listar_hijos()">Hijos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="tokens-tab" data-toggle="tab" href="#tokens" role="tab" aria-controls="tokens" aria-selected="false" onclick="admin_tok.get_tokens_black()">Tokens</a>
+              <a class="nav-link" id="tokens-tab" data-toggle="tab" href="#tokens" role="tab" aria-controls="tokens" aria-selected="false" onclick="admin_tok.obtener_tokens_bloqueados()">Tokens</a>
             </li>
           </ul>
           <!-- fin tabs -->

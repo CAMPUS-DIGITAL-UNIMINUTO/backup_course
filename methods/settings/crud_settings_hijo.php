@@ -6,23 +6,25 @@
  */
 require_once($CFG->dirroot . '/local/backup_course/methods/settings/query_bl_wl.php');
 class ws_access{
+    public function __construct(){    }  
+
+    
     /*
-     * Run the class -> perms
+     * ejecutar the class -> perms
      * @params -> array(url_padre,token,ip,estado)
      * return {int};
      */
     public function perms($param)    {
-        $obj = new self();
         $idfunc = $param['function'];
         switch ($idfunc) {
             case 'C01':
-                $resp = $obj->creNodo($param);
+                $resp = $this->creNodo($param);
                 break;
             case 'U01':
-                $resp = $obj->updNodo($param);
+                $resp = $this->actua_nodo($param);
                 break;
             case 'D01':
-                $resp = $obj->delNodo($param);
+                $resp = $this->elimi_nodo($param);
                 break;
         }
 
@@ -32,7 +34,7 @@ class ws_access{
     private function creNodo($params)    {
         global $DB, $CFG;
         $query_bl_wl = new query_bl_wl();
-        $resp = $query_bl_wl->run($params);
+        $resp = $query_bl_wl->ejecutar($params);
         if ($resp->response == 'Puede crear') {
             $registro_token = new stdClass();
             $registro_token->nombre = 'Padre';
@@ -50,15 +52,15 @@ class ws_access{
     }
 
     /*
-     * Update search -> updNodo
+     * Update search -> actua_nodo
      * Actualizar el token en el nodo
      * @params -> array(url_padre,token,ip,estado)
      * return {objet};
      */
-    private function updNodo($params)    {
+    private function actua_nodo($params)    {
         global $DB;
         $query_bl_wl = new query_bl_wl();
-        $resp = $query_bl_wl->run($params);
+        $resp = $query_bl_wl->ejecutar($params);
         $id_reg = $query_bl_wl->QRY_RBC($params['url']);
         if ($resp->response == 'Ya existe en la blanca' && !empty($id_reg)) {
             $registro_token = new stdClass();
@@ -86,15 +88,15 @@ class ws_access{
     }
 
     /*
-     * Delete Padre -> delNodo
+     * Delete Padre -> elimi_nodo
      * Eliminar token en el nodo
      * @params -> array(url_padre,token,ip,estado)
      * return {objet};
      */
-    private function delNodo($params)    {
+    private function elimi_nodo($params)    {
         global $DB;
         $query_bl_wl = new query_bl_wl();
-        $resp = $query_bl_wl->run($params);
+        $resp = $query_bl_wl->ejecutar($params);
         $id_reg = $query_bl_wl->QRY_RBC($params['url']);
         if ($resp->response == 'Ya existe en la blanca' && !empty($id_reg)) {
             $query_bl_wl->DEL_WL($query_bl_wl->QRY_URLWL($params['url']));

@@ -4,101 +4,89 @@
  * and open the template in the editor.
  */
 
-class view_updates {
+class ver_actualizaciones {
+    constructor() {this.obtener_actualizaciones();}
     /**
      * Listar nodos actualizados
      * @returns {undefined}
      */
-    get_updates() {
-        $('.loader').css("display", "block");
-        $('#list_updates_set').empty();
-        $.ajax({
-            url: '../../methods/settings/class_admin_updates.php',
-            data: {key: 'Q01'},
-            type: 'POST',
-            success: function (json) {
+    obtener_actualizaciones() {  
+        document.querySelector('.loader').style.display = "block";  
+        document.querySelector('#list_updates_set').innerHTML = '';  
+      
+        let datosFormulario = {'key': 'Q01'};  
+        fetch('../../methods/settings/class_admin_updates.php', {  
+            method: 'POST',  
+            headers: {   'Content-Type': 'application/json'   },  
+            body: JSON.stringify(datosFormulario)  
+        })  
+        .then(response => {  
+            if (!response.ok) { throw new Error('Network response was not ok');}  
+            return response.json();  
+        })  
+        .then(data => {  
+            if(Object.keys(data).length > 0){   
+                document.querySelector('#list_updates_set').innerHTML = '<span class="lista_no_updates" >' + data + '</span>';  
+                if (typeof data == 'object') {  
+                    document.querySelector('#list_updates_set').innerHTML = '';  
+                    for (var k in data) {
+                        let v = data[k] 
+                        document.querySelector('#list_updates_set').insertAdjacentHTML('beforeend', '<tr id="datos_nodos-' + v['id'] + '" onclick="v_actualizaciones.obtener_lista_cursos_actualizados(' + v['id'] + ')">' +  
+                            '<td style="color: #000;"> ' + v['nombre'] + '</td>' +  
+                            '<td style="color: #000;"> ' + v['url_hijo'] + '</td>' +  
+                        '</tr>');  
+                    };  
+                } else  document.querySelector('#list_updates_set').innerHTML = '<span class="lista_no_updates" >No hay updates enviadas</span>';  
+                
+            } else  document.querySelector('#list_updates_set').innerHTML = '<span class="lista_no_updates" >No hay nodos con actualizaciones enviadas</span>';  
+        })  
+        .catch((error) => {  console.error('Error:', error);   })  
+        .finally(() => {   document.querySelector('.loader').style.display = "none";   });  
+    }  
 
-            },
-            error: function (result, textStatus, errorThrown) {
-                //GSC.error('2','getBanckPreguntas',result.status);
-            },
-            complete: function (json, status) {
-                if (status != 'error') {
-                    try {
-                        if (json.responseText.length > 2) {
-                            $('#list_updates_set').append('<span class="lista_no_updates" >' + json.responseText + '</span>');
-                            if (typeof JSON.parse(json.responseText) == 'object') {
-                                $('#list_updates_set').empty();
-                                $.each(JSON.parse(json.responseText), function (k, v) {
-                                    $('#list_updates_set').append('<tr id="datos_nodos-' + v['id'] + '" onclick="v_updates.get_list_courses_updates(' + v['id'] + ')">' +
-                                            '<td style="color: #000;"> ' + v['nombre'] + '</td>' +
-                                            '<td style="color: #000;"> ' + v['url_hijo'] + '</td>' +
-                                        '</tr>');
-                                           
-                                });
-                            }else {
-                                $('#list_updates_set').append('<span class="lista_no_updates" >No hay updates enviadas</span>');
-                            }
-
-                        } else {
-                            $('#list_updates_set').append('<span class="lista_no_updates" >No hay nodos con actualizaciones enviadas</span>');
-                        }
-                    } catch (e) {
-                    } finally {
-                        $('.loader').css("display", "none");
-                    }
-                }
-            }
-
-        });
-    }
        
     
     /**
      * Listar cursos updates en hijos
      * @returns {undefined}
      */
-    get_list_courses_updates(id) {
-        $('.loader').css("display", "block");
-        $('#list_updates_activos').empty();
-        $.ajax({
-            url: '../../methods/settings/class_admin_updates.php',
-            data: {key: 'Q02', id_nodo:id},
-            type: 'POST',
-            success: function (json) {},
-            error: function (result, textStatus, errorThrown) {},
-            complete: function (json, status) {
-                if (status != 'error') {
-                    try {
-                        if (json.responseText.length > 2) {
-                            $('#list_updates_activos').append('<span class="lista_no_updates" >' + json.responseText + '</span>');
-                            if (typeof JSON.parse(json.responseText) == 'object') {
-                                $('#list_updates_activos').empty();
-                                $.each(JSON.parse(json.responseText), function (k, v) {
-                                    $('#list_updates_activos').append('<tr id="datos_list_course-' + v['id_course_sp'] + '" onclick="v_updates.get_list_items_updates(' + v['id_course_sp'] + ', '+id+')">' +
-                                            '<td class="lista_no_updates" style="color: #000;">' + v['fullname'] + '</td>' +
-                                            '<td class="lista_no_updates" style="color: #000;">' + v['shortname'] + '</td>' +
-                                        '</tr>');
-                                           
-                                });
-                            }else{
-                                $('#list_updates_activos').append('<span class="lista_no_updates" >No hay updates activos</span>');
-                            }
+    obtener_lista_cursos_actualizados(id) {  
+        document.querySelector('.loader').style.display = "block";  
+        document.querySelector('#list_updates_activos').innerHTML = '';  
+      
+        let datosFormulario = {'key': 'Q02', 'id_nodo': id};  
+        fetch('../../methods/settings/class_admin_updates.php', {  
+            method: 'POST',  
+            headers: {   'Content-Type': 'application/json'   },  
+            body: JSON.stringify(datosFormulario)  
+        })  
+        .then(response => {  
+            if (!response.ok) { throw new Error('Network response was not ok');}  
+            return response.json();  
+        })  
+        .then(data => {  
+            if(Object.keys(data).length > 0){    
+                document.querySelector('#list_updates_activos').innerHTML = '<span class="lista_no_updates" >' + data + '</span>';  
+                if (typeof data == 'object') {  
+                    document.querySelector('#list_updates_activos').innerHTML = '';  
+                    for (var k in data) {
+                        let v = data[k]  
+                        document.querySelector('#list_updates_activos').insertAdjacentHTML('beforeend', '<tr id="datos_list_course-' + v['id_course_sp'] + '" onclick="v_actualizaciones.obtener_lista_items_actualizados(' + v['id_course_sp'] + ', '+id+')">' +  
+                            '<td class="lista_no_updates" style="color: #000;">' + v['fullname'] + '</td>' +  
+                            '<td class="lista_no_updates" style="color: #000;">' + v['shortname'] + '</td>' +  
+                        '</tr>');  
+                    };  
+                } else {  
+                    document.querySelector('#list_updates_activos').innerHTML = '<span class="lista_no_updates" >No hay updates activos</span>';  
+                }  
+            } else {  
+                document.querySelector('#list_updates_activos').innerHTML = '<span class="lista_no_updates" >No hay updates activos</span>';  
+            }  
+        })  
+        .catch((error) => { console.error('Error:', error);  })  
+        .finally(() => {  document.querySelector('.loader').style.display = "none";   });  
+    }  
 
-                        } else {
-                            $('#list_updates_activos').append('<span class="lista_no_updates" >No hay updates activos</span>');
-
-                        }
-                    } catch (e) {
-                        //GSC.error('1','getBanckPreguntas',e);
-                    } finally {
-                        $('.loader').css("display", "none");
-                    }
-                }
-            }
-
-        });
-    }
     /*
      * Borrar updates de la lista negra
      * @param {int} id
@@ -106,53 +94,42 @@ class view_updates {
      * @param {string} tok
      * @returns {Generator}
      */
-    get_list_items_updates(id_course, id_nodo){
-        $('.loader').css("display", "block");
-        $.ajax({
-            url: '../../methods/settings/class_admin_updates.php',
-            data: {key: 'Q03', id_nodo: id_nodo, id_course: id_course},
-            type: 'POST',
-            success: function (json) {},
-            error: function (result, textStatus, errorThrown) {},
-            complete: function (json, status) {
-                if (status != 'error') {
-                    try {
-                        if (json.responseText.length > 2) {
-                            $('#list_updates_items').append('<span class="lista_no_updates" >' + json.responseText + '</span>');
-                            if (typeof JSON.parse(json.responseText) == 'object') {
-                                $('#list_updates_items').empty();
-                                $.each(JSON.parse(json.responseText), function (k, v) {
-                                    $('#list_updates_items').append('<tr id="datos_list_items_course-' + v['id'] + '" onclick="">' +
-                                            '<td style="width: 20%; float: left; color: #000;">' + v['type_act'] + '</td>' +
-                                            '<td style="width: 20%; float: left; color: #000;">' + v['time_update_date'] + '</td>' +
-                                            '<td style="width: 40%; float: left; color: #000;">' + v['email'] + '</td>' +
-                                            '<td style="width: 20%; float: left; color: #000;" data-toggle="collapse" data-target="#contenDataPlantilla-'+v['id']+'"><i class="fa fa-fw fa-eye"></i> Ver objeto</td>' +
-                                            
-                                        '</tr>'+
-                                        '<tr class="collapse" id="contenDataPlantilla-'+v['id']+'"><td style="width: 100%;">'+
-                                            '<textarea style="width: 100%;">' + v['obj_act'] + '</textarea>' +
-                                        '</td></tr>');
-                                           
-                                });
-                            }else{
-                                $('#list_updates_items').append('<span class="lista_no_updates" >No hay updates activos</span>');
-                            }
-
-                        } else {
-                            $('#list_updates_items').append('<span class="lista_no_updates" >No hay updates activos</span>');
-
-                        }
-                    } catch (e) {
-                        //GSC.error('1','getBanckPreguntas',e);
-                    } finally {
-                        $('.loader').css("display", "none");
-                    }
-                }
-            }
-
-        });
-    }
+    obtener_lista_items_actualizados(id_course, id_nodo){  
+        document.querySelector('.loader').style.display = "block";  
+      
+        let datosFormulario = {'key': 'Q03', 'id_nodo': id_nodo, 'id_course': id_course};  
+        fetch('../../methods/settings/class_admin_updates.php', {  
+            method: 'POST',  
+            headers: {  'Content-Type': 'application/json'  },  
+            body: JSON.stringify(datosFormulario)  
+        })  
+        .then(response => {  
+            if (!response.ok) { throw new Error('Network response was not ok');}  
+            return response.json();  
+        })  
+        .then(data => {  
+            if(Object.keys(data).length > 0){ 
+                document.querySelector('#list_updates_items').innerHTML = '<span class="lista_no_updates" >' + data + '</span>';  
+                if (typeof data == 'object') {  
+                    document.querySelector('#list_updates_items').innerHTML = '';  
+                    for (var k in data) {
+                        let v = data[k]   
+                        document.querySelector('#list_updates_items').insertAdjacentHTML('beforeend', '<tr id="datos_list_items_course-' + v['id'] + '" onclick="">' +  
+                            '<td style="width: 20%; float: left; color: #000;">' + v['type_act'] + '</td>' +  
+                            '<td style="width: 20%; float: left; color: #000;">' + v['time_update_date'] + '</td>' +  
+                            '<td style="width: 40%; float: left; color: #000;">' + v['email'] + '</td>' +  
+                            '<td style="width: 20%; float: left; color: #000;" data-toggle="collapse" data-target="#contenDataPlantilla-'+v['id']+'"><i class="fa fa-fw fa-eye"></i> Ver objeto</td>' +  
+                        '</tr>'+  
+                        '<tr class="collapse" id="contenDataPlantilla-'+v['id']+'"><td style="width: 100%;">'+  
+                            '<textarea style="width: 100%;">' + v['obj_act'] + '</textarea>' +  
+                        '</td></tr>');  
+                    };  
+                } else  document.querySelector('#list_updates_items').innerHTML = '<span class="lista_no_updates" >No hay updates activos</span>';  
+            } else  document.querySelector('#list_updates_items').innerHTML = '<span class="lista_no_updates" >No hay updates activos</span>';  
+        })  
+        .catch((error) => {  console.error('Error:', error);   })  
+        .finally(() => {   document.querySelector('.loader').style.display = "none";  });  
+    }  
 }
 
-var v_updates = new view_updates();
-v_updates.get_updates();
+const v_actualizaciones = new ver_actualizaciones();

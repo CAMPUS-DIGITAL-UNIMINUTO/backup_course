@@ -4,20 +4,21 @@ require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/pagelib.php");
 require_once("$CFG->libdir/blocklib.php");
 
-class admin_updates{
-    
-    public static function run(){
-        $obj = new self();
+class admin_actualizaciones{
+
+    public function __construct(){   $this->ejecutar();   }  
+      
+    public function ejecutar(){ 
         $idfunc = $_POST['key']; 
         switch($idfunc){
             case 'Q01': 
-                $resp = $obj->lista_nodos();
+                $resp = $this->lista_nodos();
                 break;
             case 'Q02': 
-                $resp = $obj->lista_courses_updates();
+                $resp = $this->lista_cursos_actualizados();
                 break;
             case 'Q03': 
-                $resp = $obj->list_items_updates();
+                $resp = $this->lista_items_actualizados();
                 break;
         }
         echo json_encode($resp);
@@ -28,26 +29,26 @@ class admin_updates{
      */
     private function lista_nodos() {
         global $DB;
-        $updates = $DB->get_records_sql('SELECT DISTINCT r.* 
+        $actualizaciones = $DB->get_records_sql('SELECT DISTINCT r.* 
                                             FROM {updates_nodos} un 
                                             LEFT JOIN {bc_registro_pc} r ON r.id = un.id_nodo_rel
                                             WHERE r.url_hijo IS NOT NULL');
-        if(!empty($updates)){
-            foreach ($updates as $key => $value) {
+        if(!empty($actualizaciones)){
+            foreach ($actualizaciones as $key => $value) {
                 
             }
         }
-        return $updates;
+        return $actualizaciones;
     }
         
     /**
      * Listar cursos actualizados del nodo
      * @returns {array}
      */
-    private function lista_courses_updates() {
+    private function lista_cursos_actualizados() {
         global $DB;
         $registro = (object)$_POST;
-        $updates = $DB->get_records_sql('SELECT DISTINCT uc.id_course_sp, c.fullname, c.shortname, r.url_hijo
+        $actualizaciones = $DB->get_records_sql('SELECT DISTINCT uc.id_course_sp, c.fullname, c.shortname, r.url_hijo
                                         FROM {bc_registro_pc} r  
                                         LEFT JOIN {updates_nodos} un ON r.id = un.id_nodo_rel
                                         LEFT JOIN {updates_log} ul ON ul.id = un.id_log
@@ -57,7 +58,7 @@ class admin_updates{
                                         WHERE r.id = :id
                                         ORDER BY c.fullname DESC',
                                     array('id'=>$registro->id_nodo));
-        return $updates;
+        return $actualizaciones;
     }
     
     
@@ -65,10 +66,10 @@ class admin_updates{
      * Listar items actualizados del nodo del curso
      * @returns {array}
      */
-    private function list_items_updates() {
+    private function lista_items_actualizados() {
         global $DB;
         $registro = (object)$_POST;
-        $updates = $DB->get_records_sql('SELECT DISTINCT un.id, uc.id_course_sp, uc.id_act_sp, uc.type_act, uc.obj_act, FROM_UNIXTIME(ul.time_update) AS time_update_date,
+        $actualizaciones = $DB->get_records_sql('SELECT DISTINCT un.id, uc.id_course_sp, uc.id_act_sp, uc.type_act, uc.obj_act, FROM_UNIXTIME(ul.time_update) AS time_update_date,
                                         u.email, c.fullname, c.shortname, r.url_hijo
                                         FROM {bc_registro_pc} r  
                                         LEFT JOIN {updates_nodos} un ON r.id = un.id_nodo_rel
@@ -79,8 +80,8 @@ class admin_updates{
                                         WHERE r.id = :id AND c.id = :course
                                         ORDER BY ul.time_update DESC',
                                     array('id'=>$registro->id_nodo, 'course'=>$registro->id_course));
-        return $updates;
+        return $actualizaciones;
     }
     
 }
-admin_updates::run();
+new admin_actualizaciones();  
