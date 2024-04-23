@@ -36,7 +36,7 @@ echo $OUTPUT->heading($title);
 
           <div class="tab-content" id="myTabContent">
             <!-- ini tab hijos -->
-            <div class="tab-pane fade show active" id="hijos" role="tabpanel" aria-labelledby="hijos-tab">
+            <div class="tab-pane fade show active " id="hijos" role="tabpanel" aria-labelledby="hijos-tab">
                 <div class="row">
                     <!-- ini crud hijos -->
                     <div id="form_hijos" class="col-md-6" style="border-right: 1px solid #dbdbdb;"> 
@@ -78,6 +78,7 @@ echo $OUTPUT->heading($title);
                             </select>
                           </div>
                           <div class="btn btn-primary" onclick="crud.validar_form()">Guardar</div>
+                          <div class="btn btn-secondary" onclick="crud.limpiar_form()">Limpiar</div>
                         </form>
                     </div>
                     <!-- fin crud hijos -->

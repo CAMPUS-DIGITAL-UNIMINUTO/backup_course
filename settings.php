@@ -45,19 +45,17 @@ if ($hassiteconfig) {
     ////////////////////////////iniciar configuración del plugin/////////////////////////////////
     $ADMIN->add('localplugins', new admin_category('local_backup_course', new lang_string('pluginname', 'local_backup_course')));
 
-    
     if(empty($tb_reg)){//solo si no hay registros
         $settings = new admin_settingpage('hijo_padre', 'Rol de instancia');
-        $options = array();  
-            $options[0]='Padre';
-            $options[1]='Hijo';
-
-        $settings->add(new admin_setting_configselect('instancia',
-        new lang_string('instancia', 'local_backup_course'),
-        new lang_string('instancia_desc', 'local_backup_course'), 0, $options));
+        
+        $settings->add(new admin_setting_configselect('local_backup_course/instancia',
+            new lang_string('instancia', 'local_backup_course'),
+            new lang_string('instancia_desc', 'local_backup_course'), 
+            0, array('Padre','Hijo')));
         $ADMIN->add('local_backup_course',$settings );
         
     }
+    
 /////////////////////////////Configuración cuando es Padre//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     if (empty(get_config('local_backup_course', 'instancia') )) {///padre
 
@@ -74,7 +72,6 @@ if ($hassiteconfig) {
         if(empty($tb_reg)){
             $registro_pc = new stdClass();
             $registro_pc->nombre = 'Soy Hijo';
-            /* $registro_pc->ip = '0.0.0.0'; */
             $registro_pc->url_hijo = 'soy_hijo';
             $registro_pc->token = sha1($tok);    
             $registro_pc->estado = 1;

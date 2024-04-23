@@ -23,7 +23,6 @@ and open the template in the editor.
 #form_search_course .ftext input, #form_create_hijo .ftext input{
     width: 61% !important;
 }
-
 /*Loader*/
 .loader {
     border: 5px solid #f3f3f3;

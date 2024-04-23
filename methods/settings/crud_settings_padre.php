@@ -118,7 +118,7 @@ class crear{
         $registro_token = new stdClass();
         $tok = sha1('2017.UVD_TokeN_noDos');
         $url_actual = explode('/local/', $_SERVER['HTTP_REFERER']);
-        $url = $this->formatHttp($registro->node_domain) . '/webservice/rest/server.php?wstoken=' . $tok . '&wsfunction=local_remoter_register_node&moodlewsrestformat=json';
+        $url = $registro->node_domain. '/webservice/rest/server.php?wstoken=' . $tok . '&wsfunction=local_remoter_register_node&moodlewsrestformat=json';
 
         if (isset($registro->token)) {
             $registro_token->token = sha1($registro->token);
@@ -126,10 +126,10 @@ class crear{
         } else $new_tok = '';
         $parametros = array(
             'function' => $registro->key,
-            'url' => $this->formatHttp($url_actual[0]),
+            'url' => $url_actual[0],
             'nombre' => $registro->node_name,
             'token' => $new_tok,
-            'url_hijo' => $this->formatHttp($registro->node_domain),
+            'url_hijo' => $registro->node_domain,
             'startdate' => $registro->startdate,
             'enddate8' => $registro->enddate8,
             'enddate16' => $registro->enddate16,
@@ -144,13 +144,13 @@ class crear{
                 if ($arr->ack == 1) {
                     $registro_token->id = $id;
                     $registro_token->nombre = $registro->node_name;
-                    $registro_token->url_hijo = $this->formatHttp($registro->node_domain);
+                    $registro_token->url_hijo = $registro->node_domain;
                     $registro_token->startdate = $registro->startdate;
                     $registro_token->enddate8 = $registro->enddate8;
                     $registro_token->enddate16 = $registro->enddate16;
                     $registro_token->estado = $registro->node_status;
                     $registro_token->edition = $registro->edition_acti;
-                    $registro_token->url_padre = $this->formatHttp($url_actual[0]);
+                    $registro_token->url_padre = $url_actual[0];
 
                     $DB->update_record('bc_registro_pc', $registro_token);
                 }
@@ -169,12 +169,12 @@ class crear{
         $registro = (object)$_POST;
         $tok = sha1('2017.UVD_TokeN_noDos');
         $url_actual = explode('/local/', $_SERVER['HTTP_REFERER']);
-        $url = $this->formatHttp($registro->node_domain).'/webservice/rest/server.php?wstoken='.$tok.'&wsfunction=local_remoter_register_node&moodlewsrestformat=json';
+        $url = $registro->node_domain.'/webservice/rest/server.php?wstoken='.$tok.'&wsfunction=local_remoter_register_node&moodlewsrestformat=json';
         $parametros = array('function'=>$registro->key,
-                        'url' =>$this->formatHttp($url_actual[0]),
+                        'url' =>$url_actual[0],
                         'nombre' => '',
                         'token' => $registro->node_token,
-                        'url_hijo' => $this->formatHttp($registro->node_domain),
+                        'url_hijo' => $registro->node_domain,
                         'edition_acti'=>'',
                         'estado' => '',
                         'startdate' => '',

@@ -93,12 +93,18 @@ class CRUD {
     .catch((error) => {  console.error('Error:', error);      });  
   }  
  
-
+  limpiar_form(){ 
+    document.getElementById('id_reg').value = ''
+    document.getElementById("nombre_hijo").value = '';
+    document.getElementById('url_hijo').value = '';
+  }
+  
+  
   listar_hijos(){  
     document.querySelector('.loader').style.display = "block";  
     document.getElementById('list_tokens_creados').innerHTML = '';  
-    document.getElementById('id_reg').value = '';   
-    let datosFormulario = {'key': 'R01'}  
+    this.limpiar_form();   
+    let datosFormulario = {'key': 'R01'}  ;
     // Enviar los datos por AJAX a un archivo PHP  
     fetch("../../methods/settings/crud_settings_padre.php", {  
       method: 'POST',  
@@ -164,7 +170,7 @@ class CRUD {
   }
 
 
-  eliminar_token(id){  
+  eliminar_crud_token(id){  
     document.querySelector('.loader').style.display = "block";  
     let contenido = document.getElementById('item_list_'+id).innerHTML;  
     let partes = contenido.split(' <br> ');  
@@ -228,7 +234,7 @@ class CRUD {
   }
 
 
-  eliminar_token (id){
+  eliminar_token(id){
     $.confirm({
       title: 'ELIMINAR',
       content: 'Al eliminar el nodo se perderá toda relación con el mismo (Actualizaciones, actividades propuestas, ETC.)'+
@@ -243,7 +249,7 @@ class CRUD {
         deleteToken: {
             text: 'Eliminar',
             btnClass: 'btn-dark',
-            action: function(){ crud.eliminar_token(id);    }
+            action: function(){ crud.eliminar_crud_token(id);    }
         },
 
         cancel: {
